@@ -8,7 +8,16 @@
 
 <script>
   import FootGuide from './components/FootGuide/FootGuide.vue'
+  import {reqAddress} from './api'
+
   export default {
+
+    async mounted () {
+      // 发异步ajax请求
+      const result = await reqAddress('116.36867', '40.10038')
+      console.log('result=', result)
+    },
+
     components: { // 局部注册, 只能在当前组件中使用
       FootGuide
     }
