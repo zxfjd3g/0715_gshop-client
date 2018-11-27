@@ -7,6 +7,7 @@ import MSite from '../pages/MSite/MSite.vue'
 import Order from '../pages/Order/Order.vue'
 import Search from '../pages/Search/Search.vue'
 import Profile from '../pages/Profile/Profile.vue'
+import Login from '../pages/Login/Login.vue'
 
 // 必须声明使用
 Vue.use(VueRouter)
@@ -17,19 +18,35 @@ export default new VueRouter({
   routes: [
     {
       path: '/msite',
-      component: MSite
+      component: MSite,
+      meta: {
+        isShow: true // 标识显示底部导航
+      }
     },
     {
       path: '/order',
-      component: Order
+      component: Order,
+      meta: {
+        isShow: true // 标识显示底部导航
+      }
     },
     {
       path: '/search',
-      component: Search
+      component: Search,
+      meta: {
+        isShow: true // 标识显示底部导航
+      }
     },
     {
       path: '/profile',
-      component: Profile
+      component: Profile,
+      meta: {
+        isShow: true // 标识显示底部导航
+      }
+    },
+    {
+      path: '/login',
+      component: Login
     },
 
     {

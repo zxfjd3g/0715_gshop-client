@@ -1,7 +1,7 @@
 <template>
   <section class="profile">
     <TopHeader title="我的"/>
-    <section class="profile-number">
+    <section class="profile-number" @click="$router.push('/login')">
       <a href="javascript:" class="profile-link">
         <div class="profile_image">
           <i class="iconfont icon-person"></i>
