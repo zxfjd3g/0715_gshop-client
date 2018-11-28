@@ -135,6 +135,10 @@
 
   export default {
 
+    mounted () {
+      this.$store.dispatch('getShops')
+    },
+
     computed: {
       ...mapState(['address'])
     },
