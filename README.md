@@ -31,8 +31,10 @@
 ## 6. 后台应用
     运行后台项目(启动mongodb服务), 
     使用postman测试后台接口, 如果不一致, 修改接口文档
-    
-## 7. 异步显示数据
+        
+# day02
+
+## 1. 异步显示数据
     封装ajax: 
         promise+axios封装ajax请求的函数
         封装每个接口对应的请求函数(能根据接口定义ajax请求函数)
@@ -50,11 +52,22 @@
         在mounted()通过$store.dispatch('actionName')来异步获取后台数据到state中
         mapState(['xxx'])读取state中数据到组件中
         在模板中显示xxx的数据
-        
-# day02
 
-## 登陆/注册的界面效果
-    1). 2种登陆方式的切换
-    2). 手机号验证
-    3). 倒计时
-    4). 密码的显示/隐藏的切换
+## 2. 异步显示分类轮播
+    通过vuex获取categorys数组(发请求, 读取)
+    对数据进行整合计算(一维变为特定的二维数组)
+    使用Swiper显示轮播, 如何在界面更新之后创建Swiper对象?
+        1). 使用watch+$nextTick()
+        2). 使用回调+$nextTick()	
+    使用svg图片实现loading的效果  
+    
+## 3. Star组件
+    创建组件, 设计组件的props
+    使用组件标签, 并传入相应的标签属性
+    完成组件编码
+    
+## 4. 登陆/注册功能: 界面效果
+    1). 切换登陆方式: loginWay
+    2). 手机号验证: right_phone + isRightPhone计算属性
+    3). 倒计时效果: computeTime + setInterval()
+    4). 密码显示/隐藏的切换: isShowPwd + transition
