@@ -50,3 +50,11 @@
         在mounted()通过$store.dispatch('actionName')来异步获取后台数据到state中
         mapState(['xxx'])读取state中数据到组件中
         在模板中显示xxx的数据
+        
+# day02
+
+## 登陆/注册的界面效果
+    1). 2种登陆方式的切换
+    2). 手机号验证
+    3). 倒计时
+    4). 密码的显示/隐藏的切换
