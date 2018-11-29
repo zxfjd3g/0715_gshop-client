@@ -33,15 +33,15 @@
                 <input type="tel" maxlength="11" placeholder="手机/邮箱/用户名">
               </section>
               <section class="login_verification">
-                <input type="tel" maxlength="8" placeholder="密码">
-                <div class="switch_button off">
-                  <div class="switch_circle"></div>
-                  <span class="switch_text">...</span>
+                <input :type="isShowPwd ? 'text' : 'password'" maxlength="8" placeholder="密码">
+                <div class="switch_button" @click="isShowPwd=!isShowPwd" :class="isShowPwd?'on':'off'">
+                  <div class="switch_circle" :class="{right: isShowPwd}"></div>
+                  <span class="switch_text">{{isShowPwd ? 'abc' : ''}}</span>
                 </div>
               </section>
               <section class="login_message">
                 <input type="text" maxlength="11" placeholder="验证码">
-                <img class="get_verification" src="./images/captcha.svg" alt="captcha">
+                <img ref="captcha" class="get_verification" src="http://localhost:5000/captcha" alt="captcha" @click="updateCaptcha">
               </section>
             </section>
           </div>
@@ -60,9 +60,10 @@
   export default {
     data () {
       return {
-        loginWay: true, // true: 短信, false: 密码
+        loginWay: false, // true: 短信, false: 密码
         phone: '', // 手机号
         computeTime: 0, // 倒计时剩余的时间(s)
+        isShowPwd: true, // 是否显示密码
       }
     },
 
@@ -86,6 +87,12 @@
             clearInterval(intervalId)
           }
         }, 1000)
+      },
+
+      // 更新显示验证码图片
+      updateCaptcha () {
+        // 一旦指定的src值与原本的src不同, 浏览器就会自动重新发请求
+        this.$refs.captcha.src='http://localhost:5000/captcha?time='+ Date.now()
       }
     }
   }
@@ -195,6 +202,8 @@
                   background #fff
                   box-shadow 0 2px 4px 0 rgba(0,0,0,.1)
                   transition transform .3s
+                  &.right
+                    transform translateX(27px)
             .login_hint
               margin-top 12px
               color #999
