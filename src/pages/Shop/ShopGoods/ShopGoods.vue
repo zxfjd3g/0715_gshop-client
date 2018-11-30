@@ -47,14 +47,33 @@
 </template>
 
 <script>
+  import BScroll from 'better-scroll'
   import {mapState} from 'vuex'
+
   export default {
     mounted () {
-      this.$store.dispatch('getShopGoods')
+      this.$store.dispatch('getShopGoods', () => {// goods状态数据更新了(有数据了)
+          this.$nextTick(() => {
+            this._initScroll()
+          })
+      })
+
+
     },
 
     computed: {
       ...mapState(['goods'])
+    },
+
+    methods: {
+      _initScroll () {
+        new BScroll('.menu-wrapper', {
+
+        })
+        new BScroll('.foods-wrapper', {
+
+        })
+      }
     }
   }
 </script>
