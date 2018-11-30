@@ -3,7 +3,11 @@
 </template>
 
 <script>
-  export default {}
+  export default {
+    mounted () {
+      this.$store.dispatch('getShopInfo')
+    }
+  }
 </script>
 
 <style lang="stylus" rel="stylesheet/stylus" scoped>

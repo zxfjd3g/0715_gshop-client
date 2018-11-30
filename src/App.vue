@@ -8,10 +8,10 @@
 
 <script>
   import FootGuide from './components/FootGuide/FootGuide.vue'
-
+  
   export default {
 
-    mounted () {
+    async mounted () {
       // 异步获取地址数据(到state中)
       this.$store.dispatch('getAddress')
       // 异步获取当前用户信息
