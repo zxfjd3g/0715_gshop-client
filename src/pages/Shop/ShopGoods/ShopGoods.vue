@@ -2,9 +2,10 @@
   <div>
     <div class="goods">
       <div class="menu-wrapper">
-        <ul>
+        <ul ref="leftUl">
           <!--current-->
-          <li class="menu-item" v-for="(good, index) in goods" :key="index" :class="{current: currentIndex===index}">
+          <li class="menu-item" v-for="(good, index) in goods" :key="index"
+              :class="{current: currentIndex===index}" @click="selectItem(index)">
 
             <span class="text bottom-border-1px">
               <img class="icon" :src="good.icon" v-if="good.icon">
@@ -48,6 +49,15 @@
 </template>
 
 <script>
+  /*
+1. 滑动右侧列表, 可能需要更新左侧当前分类项
+2. 点击左侧某个分类项, 右侧列表滑动到对应的位置
+3. 保存当前分类项始终可见
+
+当前分类的下标: currentIndex
+   右侧列表滑动的Y轴坐标: scrollY  ==> 在右侧滑动时实时的改变
+   右侧列表中所有分类li的top值: tops  ==> 列表显示之后统计
+   */
   import BScroll from 'better-scroll'
   import {mapState} from 'vuex'
   import CartControl from '../../../components/CartControl/CartControl.vue'
@@ -81,34 +91,43 @@
       // 当前分类的下标
       currentIndex() {
         const {scrollY, tops} = this
-        return tops.findIndex((top, index) => {
+        // 得到当前分类的下标
+        const index = tops.findIndex((top, index) => {
           // [0, 5, 10, 13, 20]   11   scrollY 在[top, nextTop)中
           return scrollY>=top && scrollY<tops[index+1]
         })
+
+        // 如果发生了变化, 让左侧列表滚动到index对应的li处
+        if(index!==this.index && this.leftScroll) {
+          this.index = index
+          this.leftScroll.scrollToElement(this.$refs.leftUl.children[index], 300)
+        }
+
+        return index
       }
     },
 
     methods: {
       _initScroll() {
-        new BScroll('.menu-wrapper', {
+        this.leftScroll = new BScroll('.menu-wrapper', {
           click: true, // 触发自定义click
         })
-        const rightScroll = new BScroll('.foods-wrapper', {
+        this.rightScroll = new BScroll('.foods-wrapper', {
           click: true,
           probeType: 1,  // 触摸, 非实时
           // probeType: 2,  // 触摸, 实时
-          // probeType: 3,  // 触摸/惯性, 实时
+          // probeType: 3,  // 触摸/惯性/编码, 实时
         })
 
         // 绑定滚动的事件监听
-        rightScroll.on('scroll', ({x, y}) => {
+        this.rightScroll.on('scroll', ({x, y}) => {
           console.log('scroll', x, y)
           // 更新scrollY
           this.scrollY = Math.abs(y)
         })
 
         // 绑定滚动结束的事件监听
-        rightScroll.on('scrollEnd', ({x, y}) => {
+        this.rightScroll.on('scrollEnd', ({x, y}) => {
           console.log('scrollEnd', x, y)
           // 更新scrollY
           this.scrollY = Math.abs(y)
@@ -138,6 +157,17 @@
         this.food = food
         // 2. 显示food组件界面
         this.$refs.food.toggleShow()
+      },
+
+      // 选择左侧某个分类项
+      selectItem (index) {
+
+        // 计算目标位置的坐标
+        const y = this.tops[index]
+        // 立即更新scrollY为目标坐标
+        this.scrollY = y
+        // 让右侧滑动到对应的位置
+        this.rightScroll.scrollTo(0, -y, 300)
       }
     },
 
