@@ -129,6 +129,11 @@
           原因: 初始值是空对象, 内部没有数据, 而模块中直接显示3层表达式
           解决: 使用v-if指令
     3). vue transition动画
+        <transition name="xxx">
+        xxx-enter-active / xxx-leave-active
+          transition
+        xxx-enter / xxx-leave-to
+          隐藏时的样式
     
 ## 4. ShopGoods组件
     1). 动态展现列表数据
@@ -146,3 +151,11 @@
         Vue.set(obj, 'xxx', value)才有数据绑定
         this.$set(obj, 'xxx', value)才有数据绑定
     2). vue transition
+    
+# day05
+## 1. ShopGoods组件滑动功能
+
+## 2. Food组件
+
+## 3. ShopCart组件
+
