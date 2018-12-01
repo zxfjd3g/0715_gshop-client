@@ -4,7 +4,7 @@
       <div class="menu-wrapper">
         <ul>
           <!--current-->
-          <li class="menu-item" v-for="(good, index) in goods" :key="index">
+          <li class="menu-item" v-for="(good, index) in goods" :key="index" :class="{current: currentIndex===index}">
 
             <span class="text bottom-border-1px">
               <img class="icon" :src="good.icon" v-if="good.icon">
@@ -14,7 +14,7 @@
         </ul>
       </div>
       <div class="foods-wrapper">
-        <ul>
+        <ul ref="foodsUl">
           <li class="food-list-hook" v-for="(good, index) in goods" :key="index">
             <h1 class="title">{{good.name}}</h1>
             <ul>
@@ -40,7 +40,6 @@
               </li>
             </ul>
           </li>
-
         </ul>
       </div>
     </div>
@@ -57,38 +56,84 @@
 
   export default {
 
-    data () {
+    data() {
       return {
-        food: {}
+        food: {}, // 需要显示的food
+        scrollY: 0, // 右侧列表滑动的Y轴坐标
+        tops: [0, 5, 10], // 右侧列表中所有分类li的top值
       }
     },
 
-    mounted () {
+    mounted() {
       this.$store.dispatch('getShopGoods', () => {// goods状态数据更新了(有数据了)
-          this.$nextTick(() => {
-            this._initScroll()
-          })
+        this.$nextTick(() => {
+          this._initScroll()
+          this._initTops()
+        })
       })
 
 
     },
 
     computed: {
-      ...mapState(['goods'])
+      ...mapState(['goods']),
+
+      // 当前分类的下标
+      currentIndex() {
+        const {scrollY, tops} = this
+        return tops.findIndex((top, index) => {
+          // [0, 5, 10, 13, 20]   11   scrollY 在[top, nextTop)中
+          return scrollY>=top && scrollY<tops[index+1]
+        })
+      }
     },
 
     methods: {
-      _initScroll () {
+      _initScroll() {
         new BScroll('.menu-wrapper', {
           click: true, // 触发自定义click
         })
-        new BScroll('.foods-wrapper', {
+        const rightScroll = new BScroll('.foods-wrapper', {
           click: true,
+          probeType: 1,  // 触摸, 非实时
+          // probeType: 2,  // 触摸, 实时
+          // probeType: 3,  // 触摸/惯性, 实时
+        })
+
+        // 绑定滚动的事件监听
+        rightScroll.on('scroll', ({x, y}) => {
+          console.log('scroll', x, y)
+          // 更新scrollY
+          this.scrollY = Math.abs(y)
+        })
+
+        // 绑定滚动结束的事件监听
+        rightScroll.on('scrollEnd', ({x, y}) => {
+          console.log('scrollEnd', x, y)
+          // 更新scrollY
+          this.scrollY = Math.abs(y)
         })
       },
 
+      _initTops () {
+        // 统计所有右侧分类li的top
+        const tops = []
+        let top = 0
+        tops.push(top)
+        // querySelectorAll()
+        const lis = this.$refs.foodsUl.getElementsByClassName('food-list-hook')
+        Array.prototype.slice.call(lis).forEach(li => {
+          top += li.clientHeight
+          tops.push(top)
+        })
+
+        // 更新tops状态数据
+        this.tops = tops
+        console.log('tops', tops)
+      },
+
       // 组件标签对象就是组件对象
-      showFood (food) {
+      showFood(food) {
         // 1. 更新food状态数据
         this.food = food
         // 2. 显示food组件界面
