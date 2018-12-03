@@ -91,12 +91,12 @@
            */
             if(!this.scroll) {
               console.log('--------')
-              this.scroll = new BScroll('.list-content', {
+              this.scroll = new BScroll('.list-content', {  // 添加style属性
                 click: true
               })
             } else {
               // 通知scroll刷新一下(重新计算==> 要不要形成滑动)
-              this.scroll.refresh()
+              this.scroll.refresh()  // 不加style属性
             }
           })
         }
