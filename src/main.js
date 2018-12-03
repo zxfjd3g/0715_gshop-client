@@ -7,6 +7,7 @@ import TopHeader from './components/TopHeader/TopHeader.vue'
 import Split from './components/Split/Split.vue'
 
 import './mock/mockServer'
+import './filters'
 
 // 注册全局组件
 Vue.component('TopHeader', TopHeader)

@@ -90,17 +90,17 @@ export default {
     const result = await reqInfo()
     if(result.code===0) {
       const info = result.data
-      info.score = 3.5
       commit(RECEIVE_INFO, {info})
     }
   },
 
-// 异步获取商家评价列表
-  async getShopRatings({commit}) {
+  // 异步获取商家评价列表
+  async getShopRatings({commit}, cb) {
     const result = await reqRatings()
     if(result.code===0) {
       const ratings = result.data
       commit(RECEIVE_RATINGS, {ratings})
+      typeof cb==='function' && cb()
     }
   },
 
