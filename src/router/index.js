@@ -20,11 +20,15 @@ const Order = () => import ('../pages/Order/Order.vue')
 const Search = () => import ('../pages/Search/Search.vue')
 const Profile = () => import ('../pages/Profile/Profile.vue')
 
+import A from '../pages/test/A.vue'
+import B from '../pages/test/B.vue'
+import B1 from '../pages/test/B1.vue'
+import B2 from '../pages/test/B2.vue'
 
 // 必须声明使用
 Vue.use(VueRouter)
 
-export default new VueRouter({
+const router = new VueRouter({
   mode: 'history', // 去掉#
   // 配置应用所有的路由
   routes: [
@@ -84,8 +88,49 @@ export default new VueRouter({
     },
 
     {
+      path: '/a',
+      component: A
+    },
+    {
+      path: '/b',
+      component: B,
+      children: [
+        {
+          path: '/b/b1',
+          component: B1
+        },
+        {
+          path: '/b/b2',
+          component: B2
+        },
+      ]
+    },
+
+    {
       path: '/',
       redirect: '/msite'
     }
   ]
 })
+
+const pathes = ['/a', '/b', '/c', '/d']
+// 注册全局前置守卫
+router.beforeEach((to, from, next) => {
+  console.log('global beforeEach()', to, from)
+  // 如果请求的是a/b, 判断是否已经登陆, 如果没有登陆, 自动跳转的登陆页面, 其它所有情况放行
+  if (pathes.indexOf(to.path) >= 0) {
+    console.log(Vue.store)
+    if (Vue.store.state.user._id) { // 已登陆
+      next()
+    } else { // 没登陆
+      next('/login')
+    }
+  } else {
+    // 放行
+    next()
+  }
+
+
+})
+
+export default router

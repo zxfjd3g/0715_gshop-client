@@ -20,6 +20,8 @@ Vue.use(VueLazyload, { // 内部定义了一个全局指令: lazy
   loading
 })
 
+// 将store保存Vue上
+Vue.store = store  // 必须在创建vm之前执行
 
 new Vue({
   el: '#app',
@@ -34,3 +36,6 @@ new Vue({
   router,
   store, // 每个组件都有一个$store属性
 })
+
+
+
